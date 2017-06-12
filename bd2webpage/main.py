@@ -5,7 +5,7 @@ from db import BladeDB as Bdb
 from pygal.style import Style
 app = Flask(__name__)
 
-db = Bdb('windDB')
+db = Bdb('fooDB2')
 
 @app.route('/')
 def main_view():

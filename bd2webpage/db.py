@@ -92,7 +92,9 @@ class BladeDB:
                   power,
                   cp
                 FROM 
-                  results"""
+                  results
+                ORDER BY
+                  test_date"""
 
 
 
