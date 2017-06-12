@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Competition</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+    <!-- Custom theme -->
+    <link rel="stylesheet" href="static/style.css" >
+
+
+    <!-- Divider semantic ui -->
+    <link rel="stylesheet" href="static/Semantic-UI-master/dist/components/divider.css" >
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="/">Data</a></li>
+        <li class="active">
+            <a href="competition">Competition<span class="sr-only">(current)</span></a></li>
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+    <div class="container" id="main-view">
+
+        <div class="row">
+            <h1 style="text-align: center;margin-bottom: 20px;">Competition for best design</h1>
+            <h1 id="headerLead" style="font-size:20px;cursor: pointer;" class="ui horizontal header divider">
+                    Current Lead
+                </h1>
+            <div class="row" id="currentLeadDiv">
+
+                <div style="text-align: center" class="col-md-12 col-lg-6">
+                    <h3>Power competition</h3>
+                    Leading group: {{ pgroup }} <br>
+                    Test number: {{ ptestNo }} <br>
+                    Test date: {{ pdate }}<br>
+                    Blade length: {{ pbladeLength }} <br>
+                    <h4>Test parameters</h4>
+                    Power: {{ ppower }} W<br>
+                    Wind speed: {{ pwindSpeed }} m/s<br>
+                    Cp: {{ pcp }}<br>
+                    Load: {{ ploadR }} Ohm<br>
+                    <h4>Generator characteristics</h4>
+                    Inner resistor: {{ pinnerR }} Ohm<br>
+                    Flux: {{ pflux }} Wb<br>
+                    Loss function: {{ pa }}x^2+{{ pb }}x+{{ pc }}<br>
+
+                </div>
+
+                <div style="text-align: center" class="col-md-12 col-lg-6">
+                    <h3>Efficiency competition</h3>
+                    Leading group: {{ cgroup }} <br>
+                    Test number: {{ ctestNo }} <br>
+                    Test date: {{ cdate }}<br>
+                    Blade length: {{ cbladeLength }} <br>
+                    <h4>Test parameters</h4>
+                    Power: {{ cpower }} W<br>
+                    Wind speed: {{ cwindSpeed }} m/s<br>
+                    Cp: {{ ccp }}<br>
+                    Load: {{ cloadR }} Ohm<br>
+                    <h4>Generator characteristics</h4>
+                    Inner resistor: {{ cinnerR }} Ohm<br>
+                    Flux: {{ cflux }} Wb<br>
+                    Loss function: {{ ca }}x^2+{{ cb }}x+{{ cc }}<br>
+
+                </div>
+            </div>
+            <h1 style="font-size:20px" class="ui horizontal header divider">
+                    Score board
+            </h1>
+            <div class="btn-group-wrap">
+                <div class="btn-group btn-group-lg" role="group">
+                  <button value="0" id="select0" type="button" class="btn btn-default btn-select active">Power</button>
+                  <button value="1" id="select1" type="button" class="btn btn-default btn-select">CP</button>
+                  <button value="2" id="select2" type="button" class="btn btn-default btn-select">Table</button>
+                </div>
+            </div>
+            <div id="graph0" class="col-md-12 col-lg-10 col-lg-offset-1">
+                <div id="chart">
+                    <embed type="image/svg+xml" src= {{ power_chart|safe }} />
+                </div>
+            </div>
+            <div id="graph1" style="display: none" class="col-md-12 col-lg-10 col-lg-offset-1">
+                <div>
+                    <embed type="image/svg+xml" src= {{ cp_chart|safe }} />
+                </div>
+            </div>
+            <div id="graph2" style="display: none" class="col-md-12 col-lg-10 col-lg-offset-1">
+                <h3>Each group's best data</h3>
+                  <p>Click the table to show more data</p>
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Group</th>
+                        <th>Test number (Power)</th>
+                        <th>Test number (Cp)</th>
+                        <th>Cp</th>
+                        <th>Power</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for list in all_best %}
+                        <tr>
+                        {% for item in list %}
+                                <td>{{ item }}</td>
+                        {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </div>
+</body>
+    <script src="static/comp_ctrl.js"></script>
+</html>

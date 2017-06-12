@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Build design data</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+    <!-- Custom theme -->
+    <link rel="stylesheet" href="static/style.css" >
+
+
+    <!-- Divider semantic ui -->
+    <link rel="stylesheet" href="static/Semantic-UI-master/dist/components/divider.css" >
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+        <li class="active">
+            <a href="">Data<span class="sr-only">(current)</span></a></li>
+        <li><a href="/competition">Competition</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+    <div class="container" id="main-view">
+
+        <h1>Data <small id="groupTitle"> </small></h1>
+        <div id="chooseGroupDiv" style="margin-bottom:25px;">
+
+            <h3>Choose group</h3>
+            <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Group number
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                  <li><a href="#">1</a></li>
+                  <li><a href="#">2</a></li>
+                  <li><a href="#">3</a></li>
+                  <li><a href="#">4</a></li>
+                  <li><a href="#">5</a></li>
+                  <li><a href="#">6</a></li>
+                  <li><a href="#">7</a></li>
+                  <li><a href="#">8</a></li>
+              </ul>
+            </div>
+        </div>
+
+        <div id="groupDataIn" style="display: none">
+        <h3>Insert the data below</h3>
+        <p>Insert csv file with the data. The data should be a .csv file using ',' or ';' as separator.
+            The columns should not contain any header. Furthermore it should contain two columns: The first one containing wind speed
+        and the second one containing voltage. Please don't include 0 in the wind speed.</p>
+        <input id="csv" type="file">
+            <div class="row">
+                <div class="col-md-12 col-lg-4">
+                    <label for="basic-url">Inner resistance</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="innerR" placeholder="Inner resistance" aria-describedby="basic-addon2">
+                      <span class="input-group-addon">Ohm</span>
+                    </div>
+                </div>
+
+            <div class="col-md-12 col-lg-4">
+                <label for="basic-url">Load resistance</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="loadR" placeholder="Load resistance" aria-describedby="basic-addon2">
+                  <span class="input-group-addon">Ohm</span>
+                </div>
+
+            </div>
+            <div class="col-md-12 col-lg-4">
+                <label for="basic-url">Flux</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="flux" placeholder="Generator flux" aria-describedby="basic-addon2">
+                  <span class="input-group-addon">Wb</span>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <label for="basic-url">Lost function (assumed quadratic)</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="a" aria-describedby="basic-addon2" id="a">
+                  <span class="input-group-addon">x^2</span>
+                    <input type="text" class="form-control" placeholder="b" aria-describedby="basic-addon2" id="b">
+                  <span class="input-group-addon">x</span>
+                    <input type="text" class="form-control" placeholder="c" aria-describedby="basic-addon2" id="c">
+                  <span class="input-group-addon"></span>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-4 col-lg-offset-2">
+                <label for="basic-url">Blade length</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Blade length" aria-describedby="basic-addon2" id="fan_size">
+                    <span class="input-group-addon">m</span>
+                </div>
+            </div>
+            </div>
+
+            <div id="graphContainer" class="row" style="margin-top:30px;display: none">
+                <h1 style="font-size:20px" class="ui horizontal header divider">
+                    Graph data
+                    <span class="glyphicon glyphicon-equalizer" aria-hidden="true"></span>
+                </h1>
+                <h2 id="graphHeader"></h2>
+                <div class="col-md-12 col-lg-6">
+                    <div id="chartPower">
+
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div id="chartCp">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6 col-lg-offset-3">
+                <button class="btn btn-lg btn-block" type="button" id="submitData">Submit data </button>
+            </div>
+        </div>
+    </div>
+</body>
+    <script src="static/data_ctrl.js"></script>
+</html>
