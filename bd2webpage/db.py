@@ -12,7 +12,7 @@ class BladeDB:
 
         self.conn = sqlite3.connect(db_name + '.db')
         self.cursor = self.conn.cursor()
-        print("Starting database: " + db_name)
+        print(" * Starting database: " + db_name)
         sql = """create table if not exists results (group_number INTEGER,
                                                       test_date DATE,
                                                       test_id INT,

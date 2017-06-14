@@ -13,6 +13,7 @@ readFile = function () {
     reader.onload = function () {
 
         // Split the list into datapoints
+        //TODO: fix this for win?
         csv_list = reader.result.split("\r\n");
 
         // Identify the data separator
@@ -100,6 +101,8 @@ $(function() {
                 type: 'POST',
                 success: function(res) {
                     graphVal = JSON.parse(res).graph;
+                    og_grapVal = JSON.parse(res).ogData;
+
                     var gData = {
                         x: graphVal.wind,
                         y: graphVal.power,
@@ -107,6 +110,14 @@ $(function() {
                         type: 'scatter',
                         name: 'Processed test data'
                     };
+                    var ogData = {
+                        x: og_grapVal.wind,
+                        y: og_grapVal.power,
+                        mode: 'lines+markers',
+                        type: 'scatter',
+                        name: 'Original test data'
+                    };
+
                     var layout = {
                       title: 'True power output',
                       xaxis: {
@@ -117,9 +128,9 @@ $(function() {
                       }
                     };
 
-                    var data = [gData];
+                    var data = [gData,ogData];
 
-                    Plotly.newPlot('chartPower', data,layout);
+                    Plotly.newPlot('chartPower', data,ogData,layout);
 
 
 

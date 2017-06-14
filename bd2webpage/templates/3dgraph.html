@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3D graph</title>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+
+    <!-- Custom theme -->
+    <link rel="stylesheet" href="static/style.css" >
+
+
+    <!-- Divider semantic ui -->
+
+
+
+
+    <link rel="stylesheet" href="static/Semantic-UI-master/dist/semantic.css">
+
+    <script src="static/Semantic-UI-master/dist/semantic.js"></script>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+<body>
+ <div class="container" id="main-view">
+
+        <div class="row">
+            <h1 style="text-align: center;margin-bottom: 20px;">3D graph</h1>
+            <p>This site generate a 3D point plot of your data</p>
+            <h1 style="font-size:20px;cursor: pointer;" class="ui horizontal header divider">
+                    Input
+                </h1>
+            <div id="input">
+                <p>The program can split you data into different categories. Input the values below, and choose how you want to split it</p>
+                    <div class="ui right labeled input">
+                      <input type="text" placeholder="List of splitting values">
+                      <div id="splitType" class="ui dropdown label">
+                        <div class="text">power</div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                          <div class="item">power</div>
+                          <div class="item">resistance</div>
+                          <div class="item">wind speed</div>
+                        </div>
+                      </div>
+                    </div>
+
+            </div>
+            <button id="submit" class="ui inverted blue button">Submit</button>
+            <h1 id="headerLead" style="font-size:20px;cursor: pointer;" class="ui horizontal header divider">
+                    Graph
+                </h1>
+
+        <div id="myDiv" style="width:100%;height:100%"></div>
+
+
+    </div>
+
+ </div>
+</body>
+    <script src="static/plot3d.js?v=1"></script>
+<script>
+        $('.ui.dropdown')
+          .dropdown('set value', 'power')
+        ;
+
+</script>
+</html>

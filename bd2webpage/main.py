@@ -3,6 +3,7 @@ import json,pygal
 from true_power import Blade_test as Bt
 from db import BladeDB as Bdb
 from pygal.style import Style
+from plot3d import sort_data
 app = Flask(__name__)
 
 db = Bdb('fooDB2')
@@ -11,7 +12,9 @@ db = Bdb('fooDB2')
 def main_view():
     return render_template('main_data.html')
 
-
+@app.route('/3dplot')
+def plot3d_view():
+    return render_template('3dgraph.html')
 
 
 @app.route('/competition')
@@ -84,6 +87,8 @@ def comp_view():
                                pbladeLength=power_winner[12]
                                )
 
+
+
 @app.route('/api/graphdata',methods=['GET', 'POST'])
 def main_data():
 
@@ -95,6 +100,7 @@ def main_data():
     for i in range(len(data['wind'])):
         data['wind'][i] = float(data['wind'][i])
         data['voltage'][i] = float(data['voltage'][i])
+
     params = json.loads(request.form['params'])
 
     # Get params from the ajax call
@@ -110,14 +116,21 @@ def main_data():
     #def __init__(self, data_mes, wind, flux, a, b, c, r_inner, r_load,fan_size):
     output = Bt(data['voltage'],data['wind'],flux, a, b, c, r_inner, r_load, fan_size)
 
+    sort_i = [i[0] for i in sorted(enumerate(data['wind']), key=lambda x: x[1])]
+
+    data_mes_i_sort = [None] * len(data['wind'])
+    for s_i, i in enumerate(sort_i):
+        data_mes_i_sort[s_i] = (data['voltage'][i]**2)/r_load
 
 
+    og_data = {'wind':sorted(data['wind']),
+               'power':data_mes_i_sort}
 
     #def add_record(self,group_number,wind,power,cp,inner_res,load_res,flux,eqa,eqb,eqc,blade_length):
     db.add_record(group_number, output.graph()['wind'], output.graph()['power'], output.graph()['cp'], r_inner, r_load, flux, a, b, c, fan_size)
 
 
-    return json.dumps({'graph':output.graph()})
+    return json.dumps({'graph':output.graph(),'ogData':og_data})
 
 @app.route('/api/groupdata',methods=['GET', 'POST'])
 def group_data():
@@ -140,6 +153,22 @@ def group_data():
                        'b' : params[4],
                        'c' : params[5],
                        'fan_size':params[6]})
+
+@app.route('/api/sort_3d_data',methods=['GET', 'POST'])
+def sort_3d_data():
+
+    # Get the entered group number
+
+
+    get_data = json.loads(request.form['data'])
+
+
+
+    #sort_data(ohm,power,wind,sort_list,sort_type="power"):
+    output = sort_data(get_data["ohm"],get_data["power"],get_data["wind"],get_data["sort_list"])
+
+    return json.dumps({'graph': output})
+
 
 if __name__ == '__main__':
     app.run()

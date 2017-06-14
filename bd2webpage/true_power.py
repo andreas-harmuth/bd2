@@ -12,7 +12,6 @@ class Blade_test:
             data_mes_i_sort[s_i]  = data_mes[i]
 
 
-
         self.wind = sorted(wind)
         self.data_mes = data_mes_i_sort
         self.flux = float(flux)
