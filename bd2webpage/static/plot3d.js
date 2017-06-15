@@ -52,13 +52,13 @@ $('#submit').click(function () {
               },
                 scene: {
                 yaxis: {
-                    title: 'Wind speed (m/s)'
+                    title: 'y:Wind speed (m/s)'
                   },
                 xaxis: {
-                    title: 'Ohm'
+                    title: 'x:Ohm'
               },
                 zaxis: {
-                    title: 'Power (W)'
+                    title: 'z:Power (W)'
               }}
             };
             Plotly.newPlot('myDiv', data,layout);
