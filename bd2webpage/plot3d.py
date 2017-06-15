@@ -31,6 +31,50 @@ def sort_data(ohm,power,wind,sort_list,sort_type="power"):
                 sort_data_dict[str(sort_list[-1])+"+"]["ohm"].append(ohm[i])
                 sort_data_dict[str(sort_list[-1])+"+"]["wind"].append(wind[i])
 
+    if sort_type == "resistance":
+        for sort_i in range(len(sort_list)):
+            max_s = sort_list[sort_i]
+            if sort_i > 0:
+                min_s = sort_list[sort_i-1]
+            else:
+                min_s = 0
+
+            for i,val in enumerate(ohm):
+                if min_s < val <= max_s:
+                    sort_data_dict.setdefault(max_s,{"power":[],"ohm":[],"wind":[]})["ohm"].append(val)
+                    sort_data_dict[max_s]["power"].append(power[i])
+                    sort_data_dict[max_s]["wind"].append(wind[i])
+
+        for i,val in enumerate(ohm):
+
+            if val > sort_list[-1]:
+                sort_data_dict.setdefault(str(sort_list[-1])+"+", {"power": [], "ohm": [], "wind": []})["ohm"].append(val)
+                sort_data_dict[str(sort_list[-1])+"+"]["power"].append(power[i])
+                sort_data_dict[str(sort_list[-1])+"+"]["wind"].append(wind[i])
+
+
+
+    if sort_type == "wind speed":
+        for sort_i in range(len(sort_list)):
+            max_s = sort_list[sort_i]
+            if sort_i > 0:
+                min_s = sort_list[sort_i-1]
+            else:
+                min_s = 0
+
+            for i,val in enumerate(wind):
+                if min_s < val <= max_s:
+                    sort_data_dict.setdefault(max_s,{"power":[],"ohm":[],"wind":[]})["wind"].append(val)
+                    sort_data_dict[max_s]["power"].append(power[i])
+                    sort_data_dict[max_s]["ohm"].append(ohm[i])
+
+        for i,val in enumerate(wind):
+
+            if val > sort_list[-1]:
+                sort_data_dict.setdefault(str(sort_list[-1])+"+", {"power": [], "ohm": [], "wind": []})["wind"].append(val)
+                sort_data_dict[str(sort_list[-1])+"+"]["power"].append(power[i])
+                sort_data_dict[str(sort_list[-1])+"+"]["ohm"].append(ohm[i])
+
     return sort_data_dict
 
 

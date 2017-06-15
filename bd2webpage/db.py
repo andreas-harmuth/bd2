@@ -28,6 +28,14 @@ class BladeDB:
                                                       blade_length FLOAT)"""
         self.cursor.execute(sql)
 
+        sql = """create table if not exists graphs (group_number INTEGER,
+                                                              data_name DATE,
+                                                              wind FLOAT,
+                                                              power FLOAT,
+                                                              resistance FLOAT)"""
+        self.cursor.execute(sql)
+
+
     def add_record(self,group_number,wind,power,cp,inner_res,load_res,flux,eqa,eqb,eqc,blade_length):
 
 
@@ -163,3 +171,88 @@ class BladeDB:
                 all_best.append([i,best_score_p[0],best_score_c[0],round(best_score_c[1],4),round(best_score_p[1],5)])
 
         return all_best
+
+    def fetch_names(self):
+        sql = """SELECT
+                   group_number,data_name
+                FROM
+                   graphs
+               """
+        self.cursor.execute(sql)
+
+        name_dict = {}
+        name_list = [[],[],[],[],[],[],[],[]]
+
+        for row in self.cursor.fetchall():
+
+            if row[1] not in name_list[row[0] - 1]:
+                name_list[row[0] - 1].append(row[1])
+
+            name_dict.setdefault(str(row[0]),[])
+
+            # Only append name once. This is not a noSQL
+            if row[1] not in name_dict[str(row[0])]:
+                name_dict[str(row[0])].append(row[1])
+
+
+
+        return name_dict,name_list
+
+
+
+
+
+    def is_name_valid(self,name,group_number):
+        sql = """SELECT
+                     data_name
+                  FROM
+                     graphs
+                 WHERE
+                     data_name = ? AND group_number = ?
+                 """
+
+        self.cursor.execute(sql,[name,group_number])
+
+        if len(self.cursor.fetchall()) > 0:
+            return False
+        else:
+            return True
+
+
+    def add_graph(self,wind,res,power,name,grp_num):
+
+
+        sql = """INSERT INTO graphs (group_number,data_name,wind,power,resistance)
+                         VALUES(?,?,?,?,?)"""
+
+        for index in range(len(wind)):
+            self.cursor.execute(sql, [grp_num,name,wind[index], power[index], res[index]])
+
+        self.conn.commit()
+
+
+
+    def get_data_by_id(self,name,group_number):
+
+
+        sql = """SELECT
+                     wind,power,resistance
+                  FROM
+                     graphs
+                 WHERE
+                     data_name = ? AND group_number = ?
+                 """
+
+        self.cursor.execute(sql, [name, group_number])
+
+        data_dict = {"wind":[],
+                     "power":[],
+                     "res":[]}
+
+        for row in self.cursor.fetchall():
+
+            data_dict["wind"].append(row[0])
+            data_dict["power"].append(row[1])
+            data_dict["res"].append(row[2])
+
+        return data_dict

@@ -25,19 +25,68 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 </head>
+<style>
+    .fluid{
+        margin-top:2%;
+    }
+</style>
 <body>
- <div class="container" id="main-view">
+ <div style="margin-bottom: 5%" class="ui container" id="main-view">
 
         <div class="row">
             <h1 style="text-align: center;margin-bottom: 20px;">3D graph</h1>
             <p>This site generate a 3D point plot of your data</p>
+            <h3>Choose old data</h3>
+            <div class="ui floating labeled icon dropdown button">
+              <i class="filter icon"></i>
+              <span class="text">Data</span>
+              <div class="menu">
+
+                <div class="divider"></div>
+                  {%for data in name_list %}
+                      {% set parent_loop = loop %}
+                      <div class="header">
+                          <i class="users icon"></i>
+                          Group {{ loop.index }}
+                        </div>
+                      {% for name in data %}
+                        <div onclick="fetchData('{{ name }}',{{ parent_loop.index }})" class="item">
+                          {{ name }}
+                        </div>
+                      {% endfor %}
+                  {% endfor %}
+              </div>
+            </div>
+
+            <div>
+                <div class="ui fluid labeled input">
+                  <div class="ui label">
+                    Wind speed
+                  </div>
+                  <input id="ws" type="text" placeholder="Copy paste your comma separated wind speed data here">
+                </div>
+
+                <div class="ui fluid labeled input">
+                  <div class="ui label">
+                    Resistance
+                  </div>
+                  <input id="res" type="text" placeholder="Copy paste your comma separated resistance data here">
+                </div>
+
+                <div class="ui fluid labeled input">
+                  <div class="ui label">
+                    Power
+                  </div>
+                  <input id="p" type="text" placeholder="Copy paste your comma separated power data here">
+                </div>
+            </div>
             <h1 style="font-size:20px;cursor: pointer;" class="ui horizontal header divider">
                     Input
                 </h1>
             <div id="input">
                 <p>The program can split you data into different categories. Input the values below, and choose how you want to split it</p>
                     <div class="ui right labeled input">
-                      <input type="text" placeholder="List of splitting values">
+                      <input id="sl" type="text" placeholder="List of splitting values">
                       <div id="splitType" class="ui dropdown label">
                         <div class="text">power</div>
                         <i class="dropdown icon"></i>
@@ -50,19 +99,33 @@
                     </div>
 
             </div>
-            <button id="submit" class="ui inverted blue button">Submit</button>
+            <button style="margin-top:2%" id="submit" class="ui inverted blue button">Submit</button>
             <h1 id="headerLead" style="font-size:20px;cursor: pointer;" class="ui horizontal header divider">
                     Graph
                 </h1>
 
         <div id="myDiv" style="width:100%;height:100%"></div>
-
+        <div class="ui action input">
+          <input id="dataName" type="text" placeholder="Unique name">
+          <select id="grpNumber" class="ui compact selection dropdown">
+              <option class="default value">Group number</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+          </select>
+          <div id="addGraph" type="submit" class="ui green disabled button">Save</div>
+        </div>
 
     </div>
 
  </div>
 </body>
-    <script src="static/plot3d.js?v=1"></script>
+    <script src="static/plot3d.js?v=3"></script>
 <script>
         $('.ui.dropdown')
           .dropdown('set value', 'power')

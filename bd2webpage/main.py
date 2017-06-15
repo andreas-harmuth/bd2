@@ -14,8 +14,51 @@ def main_view():
 
 @app.route('/3dplot')
 def plot3d_view():
-    return render_template('3dgraph.html')
 
+    name_dict,name_list = db.fetch_names()
+
+
+
+
+    return render_template('3dgraph.html', name_dict=name_dict,name_list=name_list)
+
+@app.route('/api/namecheck',methods=['GET', 'POST'])
+def valid_name():
+    # Get the entered group number
+    data = json.loads(request.form['data'])
+
+    if data["name"] == "noname":
+        isValid = False
+    else:
+        isValid = db.is_name_valid(data["name"],data["group_number"])
+
+    # Else return the data
+    return json.dumps({'isValid' : isValid})
+
+@app.route('/api/databyid',methods=['GET', 'POST'])
+def data_by_id():
+    # Get the entered group number
+    data = json.loads(request.form['data'])
+
+
+    data_dict = db.get_data_by_id(data["name"],data["group_number"])
+
+    # Else return the data
+    return json.dumps({'data':data_dict})
+
+
+@app.route('/api/addGraph',methods=['GET', 'POST'])
+def add_graph():
+    get_data = json.loads(request.form['data'])
+
+    ohm = [float(o) for o in get_data["res"]]
+    power = [float(o) for o in get_data["power"]]
+    wind = [float(o) for o in get_data["wind"]]
+
+
+    # add_graph(self,wind,res,power,name,grp_num):
+    db.add_graph(wind,ohm,power,get_data["name"],int(get_data["group_number"]))
+    return json.dumps({'status': True})
 
 @app.route('/competition')
 def comp_view():
@@ -163,9 +206,15 @@ def sort_3d_data():
     get_data = json.loads(request.form['data'])
 
 
+    type = get_data['type']
 
+    # Convert from string to float
+    ohm = [float(o) for o in get_data["ohm"]]
+    power = [float(o) for o in get_data["power"]]
+    wind = [float(o) for o in get_data["wind"]]
+    sort_list = [int(o) for o in get_data["sort_list"]]
     #sort_data(ohm,power,wind,sort_list,sort_type="power"):
-    output = sort_data(get_data["ohm"],get_data["power"],get_data["wind"],get_data["sort_list"])
+    output = sort_data(ohm,power,wind,sort_list,sort_type=type)
 
     return json.dumps({'graph': output})
 
