@@ -6,7 +6,7 @@ from pygal.style import Style
 from plot3d import sort_data
 app = Flask(__name__)
 
-db = Bdb('fooDB2')
+db = Bdb('windDB')
 
 @app.route('/')
 def main_view():

@@ -145,7 +145,7 @@ $('#addGraph').click(function () {
         },
         type: 'POST',
         success: function (res) {
-            console.log(res)
+            location.reload();
 
         },
         error: function (err) {
